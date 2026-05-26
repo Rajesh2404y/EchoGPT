@@ -1,0 +1,1 @@
+Generate quiz material from the uploaded media. Include multiple-choice questions, answers, brief explanations, and flashcards.

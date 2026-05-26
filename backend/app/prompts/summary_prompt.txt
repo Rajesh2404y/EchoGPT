@@ -1,0 +1,1 @@
+Summarize the uploaded media using only transcript context. Include the central thesis, key takeaways, and important timestamps when available.

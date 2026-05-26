@@ -1,0 +1,1 @@
+Create clean study notes from the uploaded media. Use headings, concise bullets, key terms, and action items when supported by the transcript.
