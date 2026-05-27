@@ -66,7 +66,7 @@ const defaultSettings = {
   sidebarColor: "#08111f",
   chatBubbleColor: "#0ea5e9",
   fontSize: "base",
-  whisperModel: "small",
+  whisperModel: "base",
   llmModel: "qwen3:8b",
   embeddingModel: "BAAI/bge-small-en",
   streaming: true,

@@ -12,15 +12,27 @@ class TranscriptService:
     def __init__(self) -> None:
         self.settings = get_settings()
 
+    def timestamp_label(self, seconds: float | None) -> str:
+        total_seconds = int(seconds or 0)
+        minutes, second = divmod(total_seconds, 60)
+        hour, minute = divmod(minutes, 60)
+        if hour:
+            return f"{hour:02d}:{minute:02d}:{second:02d}"
+        return f"{minute:02d}:{second:02d}"
+
     def normalize(self, transcription: dict) -> dict:
         segments = []
         for segment in transcription.get("segments", []):
             text = clean_transcript(segment.get("text", ""))
             if text:
+                start = float(segment.get("start", 0))
+                end = float(segment.get("end", 0))
                 segments.append(
                     {
-                        "start": float(segment.get("start", 0)),
-                        "end": float(segment.get("end", 0)),
+                        "start": start,
+                        "end": end,
+                        "timestamp": start,
+                        "timestamp_label": self.timestamp_label(start),
                         "text": text,
                     }
                 )

@@ -8,23 +8,35 @@ class Timestamp(BaseModel):
 
 
 class ProcessResponse(BaseModel):
+    success: bool = True
+    status: str = "completed"
     collection_id: str
     title: str
     transcript: str
     timestamps: list[Timestamp]
     chunks: int
+    is_truncated: bool = False
+    processed_seconds: int | None = None
 
 
 class SourceChunk(BaseModel):
     text: str
+    timestamp: float | None = None
+    timestamp_label: str | None = None
     start: float | None = None
     end: float | None = None
     score: float | None = None
+    rerank_score: float | None = None
+    vector_score: float | None = None
+    video_id: str | None = None
+    source_url: str | None = None
 
 
 class ChatResponse(BaseModel):
+    success: bool = True
     answer: str
     sources: list[SourceChunk]
+    status: str = "completed"
 
 
 class ChatMessage(BaseModel):

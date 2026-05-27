@@ -17,9 +17,9 @@ export default function App() {
     <AppProvider>
       <div className="app-shell text-zinc-100 transition-colors duration-300">
         <Navbar />
-        <div className="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-[240px_1fr]">
+        <div className="app-body mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-[240px_1fr]">
           <Sidebar />
-          <main className="min-h-[calc(100vh-4rem)] p-3 pb-24 md:p-5">
+          <main className="app-main">
             <Suspense fallback={<div className="grid min-h-[420px] place-items-center"><Loader label="Loading EchoGPT" /></div>}>
               <Routes>
                 <Route path="/" element={<Home />} />

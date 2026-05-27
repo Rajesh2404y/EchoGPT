@@ -12,16 +12,19 @@ export default function UploadBox() {
   const [url, setUrl] = useState("");
   const { settings, setActiveCollection, setTranscript, setTimestamps, setMessages } = useAppState();
   const [language, setLanguage] = useState(settings.defaultLanguage || "auto");
+  const [processingStatus, setProcessingStatus] = useState("");
   const { loading, error, run } = useAsyncAction();
 
   function applyResult(result) {
+    console.debug("[upload] applying result", result);
     setActiveCollection(result);
     setTranscript(result.transcript);
     setTimestamps(result.timestamps);
     setMessages([
       {
         role: "assistant",
-        content: `Ready. I indexed ${result.chunks} transcript chunks from "${result.title}".`,
+        content: `Completed. I indexed ${result.chunks} transcript chunks from "${result.title}".`,
+        createdAt: new Date().toISOString(),
       },
     ]);
   }
@@ -29,13 +32,33 @@ export default function UploadBox() {
   async function submitUrl(event) {
     event.preventDefault();
     if (!url.trim()) return;
-    await run(async () => applyResult(await processYouTube(url, { language })));
+    await run(async () => {
+      setProcessingStatus("Processing full video...");
+      const timers = [
+        window.setTimeout(() => setProcessingStatus("Generating transcript..."), 900),
+        window.setTimeout(() => setProcessingStatus("Creating embeddings..."), 2200),
+      ];
+      try {
+        const result = await processYouTube(url, { language });
+        setProcessingStatus("Completed");
+        applyResult(result);
+      } finally {
+        timers.forEach(window.clearTimeout);
+      }
+    });
+    setProcessingStatus("");
   }
 
   async function onFileChange(event) {
     const file = event.target.files?.[0];
     if (!file) return;
-    await run(async () => applyResult(await uploadAudio(file, { language })));
+    await run(async () => {
+      setProcessingStatus("Generating transcript...");
+      const result = await uploadAudio(file, { language });
+      setProcessingStatus("Creating embeddings...");
+      applyResult(result);
+    });
+    setProcessingStatus("");
   }
 
   return (
@@ -63,7 +86,7 @@ export default function UploadBox() {
         <span className="text-sm text-zinc-400">mp3, wav, m4a up to your configured server limit</span>
         <input ref={fileRef} className="hidden" type="file" accept=".mp3,.wav,.m4a,audio/*" onChange={onFileChange} />
       </button>
-      {loading && <Loader />}
+      {loading && <Loader label={processingStatus || "Processing media"} />}
       {error && <p className="rounded-2xl border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-100">{error}</p>}
       <div className="grid grid-cols-3 gap-2 text-xs text-zinc-400">
         <span className="metric"><FileAudio size={14} /> Whisper auto</span>

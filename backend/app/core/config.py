@@ -18,19 +18,27 @@ class Settings(BaseSettings):
     whisper_cache_dir: Path = Path("backend/temp/cache/whisper")
     hf_cache_dir: Path = Path("backend/temp/cache/huggingface")
 
-    whisper_model: str = "small"
+    whisper_model: str = "base"
+    whisper_compute_type: str = "int8"
     embedding_model: str = "BAAI/bge-small-en"
     reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     ollama_model: str = "qwen3:8b"
     ollama_host: str = "http://localhost:11434"
     ffmpeg_location: str | None = None
 
-    chunk_size: int = 500
-    chunk_overlap: int = 100
-    retrieval_k: int = 8
-    rerank_top_k: int = 5
+    chunk_size: int = 700
+    chunk_overlap: int = 150
+    retrieval_k: int = 15
+    rerank_top_k: int = 3
     max_upload_mb: int = 250
-    max_transcription_seconds: int = 0
+    max_transcription_seconds: int = Field(
+        default=-1,
+        description="Maximum audio seconds to transcribe. Use -1 for unlimited.",
+    )
+    transcription_window_seconds: int = Field(
+        default=120,
+        description="Whisper window size in seconds for long media transcription.",
+    )
 
     class Config:
         env_file = ".env"

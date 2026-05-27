@@ -11,9 +11,12 @@ from app.api.routes import (
 )
 from app.core.config import get_settings
 from app.core.logger import configure_logging
+from app.core.logger import get_logger
+from app.services.rerank_service import warmup_reranker
 
 configure_logging()
 settings = get_settings()
+logger = get_logger(__name__)
 
 app = FastAPI(
     title="EchoGPT API",
@@ -41,3 +44,12 @@ app.include_router(quiz_routes.router)
 @app.get("/health")
 async def health():
     return {"status": "ok", "app": settings.app_name}
+
+
+@app.on_event("startup")
+async def startup() -> None:
+    try:
+        warmup_reranker()
+        logger.info("Reranker warmed up at startup.")
+    except Exception as exc:
+        logger.warning("Reranker warmup skipped: %s", exc)

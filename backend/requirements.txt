@@ -4,10 +4,12 @@ pydantic-settings
 langchain
 langchain-community
 chromadb
+posthog<3
 sentence-transformers
 transformers
 torch
 openai-whisper
+faster-whisper
 yt-dlp
 ffmpeg-python
 pydub

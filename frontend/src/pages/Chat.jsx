@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ChatBox from "../components/ChatBox/ChatBox";
 import Loader from "../components/Loader/Loader";
-import { Panel } from "../components/ui/primitives";
 import { useAppState } from "../context/AppContext";
 import { getHistoryChat } from "../services/historyService";
 import { getLocalChat, normalizeStoredMessages, saveLocalChat } from "../services/localChatStore";
@@ -66,9 +65,9 @@ export default function Chat() {
   }, [chatId, setActiveCollection, setMessages]);
 
   return (
-    <Panel className="mx-auto max-w-5xl overflow-hidden p-0 shadow-2xl">
+    <div className="chat-page">
       {loading ? (
-        <div className="grid min-h-[520px] place-items-center p-6">
+        <div className="grid h-full place-items-center p-6">
           <Loader label="Loading previous chat" />
         </div>
       ) : (
@@ -77,6 +76,6 @@ export default function Chat() {
           <ChatBox />
         </>
       )}
-    </Panel>
+    </div>
   );
 }

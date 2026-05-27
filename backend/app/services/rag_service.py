@@ -22,7 +22,12 @@ class RAGService:
 
     def build_prompt(self, question: str, context_chunks: list[dict]) -> str:
         context = format_context(context_chunks)
-        return f"Transcript context:\n{context}\n\nUser question: {question}\n\nAnswer:"
+        return (
+            "Use only the top reranked transcript chunks below. "
+            "Prefer chunks whose timestamp/topic matches the user question. "
+            "If the answer is present, answer directly and cite timestamps.\n\n"
+            f"Transcript context:\n{context}\n\nUser question: {question}\n\nAnswer:"
+        )
 
     async def answer(self, collection_id: str, question: str) -> tuple[str, list[dict]]:
         if not collection_id:

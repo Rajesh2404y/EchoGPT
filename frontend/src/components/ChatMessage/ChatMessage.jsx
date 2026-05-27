@@ -28,9 +28,9 @@ function renderMarkdown(text = "") {
 export default function ChatMessage({ message, showTimestamp = true }) {
   const isUser = message.role === "user";
   return (
-    <div className={`fade-in flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
+    <div className={`chat-row fade-in ${isUser ? "chat-row-user" : "chat-row-assistant"}`}>
       {!isUser && (
-        <span className="animated-gradient grid size-9 shrink-0 place-items-center rounded-2xl text-white">
+        <span className="chat-avatar animated-gradient">
           <Bot size={17} />
         </span>
       )}
@@ -43,7 +43,7 @@ export default function ChatMessage({ message, showTimestamp = true }) {
         )}
       </div>
       {isUser && (
-        <span className="grid size-9 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/10 text-white">
+        <span className="chat-avatar chat-avatar-user">
           <User size={17} />
         </span>
       )}

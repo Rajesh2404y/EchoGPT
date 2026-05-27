@@ -15,7 +15,7 @@ winget install Gyan.FFmpeg
 
 If ffmpeg is not on `PATH`, set `FFMPEG_LOCATION` in `backend/.env` to the folder that contains `ffmpeg.exe` and `ffprobe.exe`.
 
-For slower CPU-only laptops, set `MAX_TRANSCRIPTION_SECONDS=180` in `backend/.env` while testing. Set it back to `0` to transcribe the full file.
+EchoGPT transcribes up to `MAX_TRANSCRIPTION_SECONDS` from each media file before chunking and embedding. The default is `3600` for one-hour courses, lectures, podcasts, and tutorials. Set `MAX_TRANSCRIPTION_SECONDS=-1` for unlimited transcription of the full file.
 
 ## Backend
 

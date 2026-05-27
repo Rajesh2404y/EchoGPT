@@ -39,7 +39,7 @@ async def ask(payload: ChatRequest):
             payload.collection_id,
             [{"role": "assistant", "content": answer}],
         )
-        return ChatResponse(answer=answer, sources=sources)
+        return ChatResponse(success=True, answer=answer, sources=sources, status="completed")
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
